@@ -25,7 +25,7 @@ void strings_put(strings* obj, char* string); //Puts a C string to an array
 char* strings_get(strings* obj, size_t index); //Returns an element from an array of specific index
 void strings_remove(strings* obj, size_t index); //Removes element of specific index from an array
 void strings_printAll(strings* obj); //Prints all array strings to stdout
-//void strings_clear(strings* obj); //Clears the array
+void strings_clear(strings* obj); //Clears the array
 /////////////////////////////////////////////////////////////////////////////////////////////
 
 /////////////////////////////////////////////////////////////////////////////////////////////
@@ -150,6 +150,21 @@ void strings_printAll(strings* obj)
 	
 }
 
+void strings_clear(strings* obj)
+{
+	size_t cap = obj->capacity;
+
+	for (size_t i = 0; i < cap; i++)
+	{
+		if (obj->m_Data[i])
+		{
+			free(obj->m_Data[i]);
+		}
+		obj->m_Data[i] = NULL;
+	}
+	obj->size = 0;
+}
+
 /////////////////////////////////////////////////////////////////////////////////////////////
 
 
@@ -157,23 +172,8 @@ void strings_printAll(strings* obj)
 int main(void)
 {
 	strings test = NewConatiner();
-	strings_put(&test, "First");
-	strings_put(&test, "Second");
-	strings_put(&test, "Third");
-	strings_put(&test, "Fourth");
 	
-	char example_text[20] = "text-example";
-	strings_put(&test, "rubidu");
-	strings_put(&test, example_text);
-	
-	strings_printAll(&test);
-	printf("%u\n", test.size);
 
-	//strings_remove(&test, 1);
 
-	
-	strings_printAll(&test);
-	printf("%u\n", test.size);
-	DeleteContainer(&test);
 	return 0;
 }
