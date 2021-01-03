@@ -20,7 +20,7 @@ struct StringContainer
 typedef struct StringContainer strings;
 //Functions
 strings NewConatiner(void); //Return new initialized struct for use 
-void DeleteContainer(strings* obj); //Deletes struct
+void DeleteContainer(strings* obj); //Deletes struct ALWAYS use to prevent memory leaks
 void strings_put(strings* obj, char* string); //Puts a C string to an array
 char* strings_get(strings* obj, size_t index); //Returns an element from an array of specific index
 void strings_remove(strings* obj, size_t index); //Removes element of specific index from an array
@@ -173,7 +173,21 @@ int main(void)
 {
 	strings test = NewConatiner();
 	
+	static char buffer[200];
 
+	const int max = 30;
 
+	for (int i = 0; i <= max; i++)
+	{
+		sprintf(buffer, "Example string:[%d]", i);
+		strings_put(&test, buffer);
+	}
+	strings_remove(&test, 10);
+	strings_remove(&test, 9);
+
+	strings_printAll(&test);
+	//system("pause");
+	DeleteContainer(&test);
+	//system("pause");
 	return 0;
 }
