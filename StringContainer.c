@@ -1,5 +1,14 @@
 #include <stdio.h>
 
+
+/////////////////////////////////////////////////////////////////////////////////////////////
+//StringContainer is a dynamic array list for C strings									   //
+//Written by Szymon Kozio³ (Critteros) for C labs exercises								   //
+//More info https://github.com/Critteros/StringContainer								   //
+/////////////////////////////////////////////////////////////////////////////////////////////
+
+
+
 int main(void)
 {
 	printf("Hello World\n");
