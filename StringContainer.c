@@ -7,6 +7,7 @@
 //StringContainer is a dynamic array list for C strings									   //
 //Written by Szymon Kozio³ (Critteros) for C labs exercises								   //
 //More info https://github.com/Critteros/StringContainer								   //
+//Version 1.0 modified: 03.01.2021 16:30												   //
 /////////////////////////////////////////////////////////////////////////////////////////////
 struct StringContainer
 {
