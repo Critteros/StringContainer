@@ -1,5 +1,5 @@
 #include <stdio.h>
-#pragma warning (disable: 4996 6001 6387 )
+#pragma warning (disable: 4996 6001 6387 6308 28182)
 
 #include <string.h>
 #include <stdlib.h>
@@ -22,8 +22,8 @@ typedef struct StringContainer strings;
 strings NewConatiner(void); //Return new initialized struct for use 
 void DeleteContainer(strings* obj); //Deletes struct
 void strings_put(strings* obj, char* string); //Puts a C string to an array
-//char* strings_get(strings* obj, size_t index); //Returns an element from an array of specific index
-//char* strings_remove(strings* obj, size_t index); //Removes element of specific index from an array
+char* strings_get(strings* obj, size_t index); //Returns an element from an array of specific index
+char* strings_remove(strings* obj, size_t index); //Removes element of specific index from an array
 //void strings_clear(strings* obj); //Clears the array
 /////////////////////////////////////////////////////////////////////////////////////////////
 
@@ -35,7 +35,7 @@ strings NewConatiner(void)
 
 	context.capacity = initialCapacity;
 	context.m_Data = (char**)malloc(initialCapacity * sizeof(char*));
-	for (int i = 0; i < initialCapacity; i++)
+	for (int i = 0; i < (int)initialCapacity; i++)
 	{
 		context.m_Data[i] = NULL;
 	}
@@ -75,6 +75,58 @@ void strings_put(strings* obj, char* string)
 
 }
 
+char* strings_get(strings* obj, size_t index)
+{
+	if (!obj->m_Data[index])
+	{
+		printf("ERROR: Null pointer exception");
+		exit(-100);
+	}
+	else
+	{
+		return (obj->m_Data[index]);
+	}
+}
+
+char* strings_remove(strings* obj, size_t index)
+{
+	if (index >= obj->capacity)
+	{
+		printf("ERROR: Null pointer exception");
+		exit(-200);
+	}
+	
+	size_t newCapacity = obj->capacity - 1;
+	char** newData = (char**)malloc(newCapacity * sizeof(char*));
+	char** oldData = obj->m_Data;
+	size_t oldCapacity = obj->capacity;
+	char* toReturn = obj->m_Data[index];
+
+	size_t j = 0;
+	for (size_t i = 0; i < oldCapacity; i++)
+	{
+		if (i == index)
+		{
+			continue;
+		}
+		else
+		{
+			newData[j] = oldData[i];
+			j++;
+		}
+	}
+	obj->m_Data = newData;
+	obj->capacity = newCapacity;
+	obj->size--;
+
+	//Cleanup
+	free(oldData[index]);
+	free(oldData);
+	return toReturn;
+
+
+}
+
 /////////////////////////////////////////////////////////////////////////////////////////////
 
 
@@ -82,15 +134,16 @@ void strings_put(strings* obj, char* string)
 int main(void)
 {
 	strings test = NewConatiner();
-	strings_put(&test, "Aba");
-	strings_put(&test, "skakdkasmdkasdm");
-	strings_put(&test, "skasadasdasdas");
-	strings_put(&test, "skakdkasdasdasdkasdm");
+	strings_put(&test, "First");
+	strings_put(&test, "Second");
+	strings_put(&test, "Third");
+	strings_put(&test, "Fourth");
 
+	strings_remove(&test, 1);
 
 	
-	printf("%s\n", test.m_Data[0]);
-	printf("%s\n", test.m_Data[1]);
+	printf("%s\n", strings_get(&test, 0));
+	printf("%s\n", strings_get(&test, 1));
 
 	DeleteContainer(&test);
 	return 0;
