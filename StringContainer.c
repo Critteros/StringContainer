@@ -23,7 +23,8 @@ strings NewConatiner(void); //Return new initialized struct for use
 void DeleteContainer(strings* obj); //Deletes struct
 void strings_put(strings* obj, char* string); //Puts a C string to an array
 char* strings_get(strings* obj, size_t index); //Returns an element from an array of specific index
-char* strings_remove(strings* obj, size_t index); //Removes element of specific index from an array
+void strings_remove(strings* obj, size_t index); //Removes element of specific index from an array
+void strings_printAll(strings* obj); //Prints all array strings to stdout
 //void strings_clear(strings* obj); //Clears the array
 /////////////////////////////////////////////////////////////////////////////////////////////
 
@@ -64,6 +65,10 @@ void strings_put(strings* obj, char* string)
 		size_t newSize = obj->capacity * 2;
 		obj->m_Data = (char**)realloc(obj->m_Data, newSize * sizeof(char*));
 		obj->capacity = newSize;
+		for (size_t i = obj->size; i < obj->capacity; i++)
+		{
+			obj->m_Data[i] = NULL;
+		}
 	}
 
 	size_t putIndex = obj->size;
@@ -88,7 +93,7 @@ char* strings_get(strings* obj, size_t index)
 	}
 }
 
-char* strings_remove(strings* obj, size_t index)
+void strings_remove(strings* obj, size_t index)
 {
 	if (index >= obj->capacity)
 	{
@@ -100,7 +105,7 @@ char* strings_remove(strings* obj, size_t index)
 	char** newData = (char**)malloc(newCapacity * sizeof(char*));
 	char** oldData = obj->m_Data;
 	size_t oldCapacity = obj->capacity;
-	char* toReturn = obj->m_Data[index];
+	
 
 	size_t j = 0;
 	for (size_t i = 0; i < oldCapacity; i++)
@@ -122,9 +127,27 @@ char* strings_remove(strings* obj, size_t index)
 	//Cleanup
 	free(oldData[index]);
 	free(oldData);
-	return toReturn;
 
 
+
+}
+
+void strings_printAll(strings* obj)
+{
+	if (obj->size == 0)
+	{
+		printf("Nothing to print\n");
+	}
+	else
+	{
+		printf("[");
+		for (size_t i = 0; i < (obj->size - 1); i++)
+		{
+			printf("%s, ", strings_get(obj, i));
+		}
+		printf("%s]\n", strings_get(obj, (obj->size - 1)));
+	}
+	
 }
 
 /////////////////////////////////////////////////////////////////////////////////////////////
@@ -138,13 +161,19 @@ int main(void)
 	strings_put(&test, "Second");
 	strings_put(&test, "Third");
 	strings_put(&test, "Fourth");
+	
+	char example_text[20] = "text-example";
+	strings_put(&test, "rubidu");
+	strings_put(&test, example_text);
+	
+	strings_printAll(&test);
+	printf("%u\n", test.size);
 
-	strings_remove(&test, 1);
+	//strings_remove(&test, 1);
 
 	
-	printf("%s\n", strings_get(&test, 0));
-	printf("%s\n", strings_get(&test, 1));
-
+	strings_printAll(&test);
+	printf("%u\n", test.size);
 	DeleteContainer(&test);
 	return 0;
 }
